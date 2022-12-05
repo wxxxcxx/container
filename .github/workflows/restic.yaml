@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          context: ./${{CONTEXT}}
+          context: ./${{ env.CONTEXT }}
           platforms: |
             linux/amd64
             linux/arm/v7
