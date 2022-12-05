@@ -2,13 +2,15 @@ name: Naive
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * 1'
 
 env:
   DOCKER_REPOSITORY: naive
   CONTEXT: naive
 
 jobs:
-  build:
+  build_and_push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
