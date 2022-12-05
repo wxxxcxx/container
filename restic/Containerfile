@@ -3,21 +3,22 @@ FROM alpine:latest
 
 RUN apk add restic rclone
 
-WORKDIR /data
 
-ENV RCLONE_CONFIG=/etc/rclone.conf \
-    RESTIC_REPOSITORY=/tmp/repository \
+VOLUME [ "/data", "/config" ]
+
+ENV RESTIC_REPOSITORY=/tmp/repository \
     RESTIC_PASSWORD=123455 \
+    RCLONE_CONFIG=/config/rclone \
     SCHEDULE="0 */6 * * *"
     
-VOLUME [ "/etc/rclone.conf" ]
-
 COPY backup /usr/bin/backup
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh && \
     chmod +x /usr/bin/backup && \
+    touch /etc/rclone.conf && \
     echo "${SCHEDULE} /usr/bin/backup" > /etc/crontabs/root
+    
 
 ENTRYPOINT ["/entrypoint.sh"]
 
