@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_REPOSITORY: naive
-  CONTEXT: naive
+  CONTEXT: ./naive/build
 
 jobs:
   build_and_push:

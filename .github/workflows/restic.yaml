@@ -7,7 +7,7 @@ on:
 
 env:
   DOCKER_REPOSITORY: restic
-  CONTEXT: restic
+  CONTEXT: ./restic/build
 
 jobs:
   build_and_push:
