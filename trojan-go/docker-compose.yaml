@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  trojan-go:
+    container_name: trojan-go
+    image: meetcw/trojan-go
+    restart: unless-stopped
+    depends_on:
+      - site
+    ports:
+      - 443:443
+    volumes:
+      - ./server.yaml.template:/server.yaml.template
+      - acme:/acme
+  site:
+    container_name: site
+    image: nginx
+    restart: unless-stopped
+    environment:
+      - DOMAIN=${DOMAIN:?}
+    ports:
+      - 80:80
+    volumes:
+      - ./config/default.template:/etc/nginx/templates/default.template
+      - acme:/acme
+  acme:
+    container_name: acme
+    image: neilpang/acme.sh
+    command: daemon
+    restart: unless-stopped
+    volumes:
+      - acme:/acme.sh
+
+volumes:
+  acme:
+
+networks:
+  default:
+      name: ${NETWORK:-service}

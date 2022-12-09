@@ -1,0 +1,23 @@
+
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	listen 1443 ssl default_server;
+	listen [::]:1443 ssl default_server;
+	ssl_protocols         TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+	ssl_ciphers           AES128-SHA:AES256-SHA:RC4-SHA:DES-CBC3-SHA:RC4-MD5;
+	ssl_certificate       /acme/fullchain.pem;
+	ssl_certificate_key   /acme/key.pem;
+	ssl_session_cache     shared:SSL:10m;
+	ssl_session_timeout   10m;
+
+	server_name ${DOMAIN};
+
+	location / {
+		root /var/www/trojan;
+		index index.html;
+		set $upstream localhost:8080
+		proxy_pass http://$target;
+	}
+}
+
