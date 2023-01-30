@@ -1,8 +1,13 @@
 {
+        http_port ${HTTP_PORT}
+        https_port ${HTTPS_PORT}
         order forward_proxy before reverse_proxy
 }
-:443, ${DOMAIN} {
-        tls ${EMAIL}
+:${HTTPS_PORT}, ${DOMAIN} {
+	log
+        tls {
+                dns cloudflare ${CF_API_TOKEN}
+        }
         forward_proxy {
                 basic_auth ${USERNAME} ${PASSWORD}
                 hide_ip

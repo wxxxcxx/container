@@ -1,20 +1,20 @@
-FROM golang:latest as builder
+FROM golang:1.18 as builder
 
 WORKDIR /root
 
-RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest && \
-    xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
+RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+RUN xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive --with github.com/caddy-dns/cloudflare@master
 
 FROM debian:latest
 
 ENV DOMAIN=example.com
-ENV EMAIL=me@example.com
+ENV HTTP_PORT=8080
+ENV HTTPS_PORT=8443
 ENV USERNAME=username
 ENV PASSWORD=password
 ENV UPSTREAM=example.com:80
+ENV CF_API_TOKEN=1234567890
 
-EXPOSE 80
-EXPOSE 443
 
 VOLUME [ "/root/.local/share/caddy" ]
 
