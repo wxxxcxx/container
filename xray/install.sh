@@ -74,7 +74,7 @@ RELEASE_LATEST=$(curl --silent "https://api.github.com/repos/XTLS/Xray-core/rele
 
 DOWNLOAD_LINK="https://github.com/XTLS/Xray-core/releases/download/$RELEASE_LATEST/Xray-linux-$MACHINE.zip"
 echo "Downloading Xray archive: $DOWNLOAD_LINK"
-wget -O "/xray/xray.zip" "$DOWNLOAD_LINK"
+wget -q -O "/xray/xray.zip" "$DOWNLOAD_LINK"
 
 ls -alh /xray
 unzip -q /xray/xray.zip -d /xray/ && rm xray.zip
