@@ -1,0 +1,9 @@
+FROM debian:latest
+
+WORKDIR /xray
+
+COPY install.sh /xray/
+
+RUN /xray/install.sh
+
+CMD [ "/xray/xray","run","-config","/xray/config.json" ]
