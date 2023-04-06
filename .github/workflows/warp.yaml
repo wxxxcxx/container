@@ -1,13 +1,13 @@
-name: Xray
+name: Warp
 
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '0 0 * * 1'
+    - cron:  '0 0 15 * *'
 
 env: 
-  DOCKER_REPOSITORY: xray
-  CONTEXT: ./xray
+  DOCKER_REPOSITORY: warp
+  CONTEXT: ./warp
 
 jobs:
   build:
@@ -38,7 +38,6 @@ jobs:
         context: ./${{ env.CONTEXT }}
         platforms: |
             linux/amd64
-            linux/arm64
         tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:${{ env.VERSION }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DOCKER_REPOSITORY }}:latest

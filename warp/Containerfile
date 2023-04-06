@@ -1,0 +1,10 @@
+FROM debian:bullseye
+
+WORKDIR /warp
+
+
+COPY install.sh start.sh /warp/
+
+RUN /warp/install.sh
+
+CMD [ "/warp/start.sh" ]
