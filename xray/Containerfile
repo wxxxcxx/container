@@ -2,8 +2,9 @@ FROM debian:latest
 
 WORKDIR /xray
 
-COPY install.sh /xray/
+COPY install_xray.sh install_warp.sh start.sh /xray/
 
-RUN /xray/install.sh
+RUN /xray/install_xray.sh &&\
+    /xray/install_warp.sh
 
-CMD [ "/xray/xray","run","-config","/xray/config.json" ]
+CMD [ "/xray/start.sh" ]

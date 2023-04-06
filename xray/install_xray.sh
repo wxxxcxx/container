@@ -1,10 +1,10 @@
 #! /bin/bash
-
+set -e
 apt update &&\
 apt install -y unzip curl wget && \
 apt clean autoclean && \
 apt autoremove --yes && \
-rm -rf /var/lib/{apt,dpkg,cache,log}/
+rm -rf /var/lib/{apt,cache,log}/
 
 MACHINE=""
 if [[ "$(uname)" == 'Linux' ]]; then

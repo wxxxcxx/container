@@ -8,4 +8,4 @@ apt-get update && \
 apt-get install -y cloudflare-warp && \
 apt-get clean autoclean && \
 apt-get autoremove --yes && \
-rm -rf /var/lib/{apt,dpkg,cache,log}/
+rm -rf /var/lib/{apt,cache,log}/
