@@ -2,9 +2,13 @@ FROM debian:latest
 
 WORKDIR /xray
 
-COPY install_xray.sh install_warp.sh start.sh /xray/
+COPY install.sh healthcheck.sh start.sh /xray/
 
-RUN /xray/install_xray.sh &&\
-    /xray/install_warp.sh
+RUN /xray/install.sh
+
+HEALTHCHECK --start-period=20s --interval=1m --timeout=10s --retries=3 CMD /xray/healthcheck.sh || exit 1
+
+ENTRYPOINT [ "dumb-init", "--" ]
 
 CMD [ "/xray/start.sh" ]
+
