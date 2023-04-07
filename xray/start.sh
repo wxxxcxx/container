@@ -10,7 +10,7 @@ function setup() {
     warp-cli --accept-tos connect
 }
 
-warp-svc &
+warp-svc > warp.log 2 > &1 &
 sleep 2
 setup
 /xray/xray run -config /xray/config.json
