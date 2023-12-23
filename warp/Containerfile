@@ -1,0 +1,14 @@
+FROM debian:latest
+
+WORKDIR /warp
+
+COPY install.sh healthcheck.sh start.sh /warp/
+
+RUN /warp/install.sh
+
+HEALTHCHECK --start-period=20s --interval=1m --timeout=10s --retries=3 CMD /warp/healthcheck.sh || exit 1
+
+ENTRYPOINT [ "dumb-init", "--" ]
+
+CMD [ "/xray/start.sh" ]
+
