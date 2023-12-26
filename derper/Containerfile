@@ -10,13 +10,12 @@ RUN go install tailscale.com/cmd/derper@main
 FROM debian:latest
 WORKDIR /app
 
-# ========= CONFIG =========
 # - derper args
 ENV DERP_HOST=derp.tailscale.com
 ENV DERP_CERTS=/app/certs/
+ENV DERP_CERT_MODE=manual
 ENV DERP_STUN=true
 ENV DERP_VERIFY_CLIENTS=false
-# ==========================
 
 # apt
 RUN apt-get update  && \
@@ -25,7 +24,6 @@ RUN apt-get update  && \
 
 COPY --from=builder /go/bin/derper /app/derper
 
+RUN ln -s /app/derper /usr/local/bin/derper
 
-ENTRYPOINT [ "/app/derper" ]
-
-CMD ["--hostname=${DERP_HOST}", "-http-port=-1", "--certmode=manual", "--certdir=${DERP_CERTS}", "--stun=${DERP_STUN}", "--verify-clients=${DERP_VERIFY_CLIENTS}"]
+CMD /app/derper -hostname=${DERP_HOST} -http-port=-1 -certmode=manual -certdir=${DERP_CERTS} -stun=${DERP_STUN} -verify-clients=${DERP_VERIFY_CLIENTS}
