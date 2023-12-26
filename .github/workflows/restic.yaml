@@ -2,6 +2,8 @@ name: Restic
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '0 0 * * 1'
 
 env:
   DOCKER_REPOSITORY: restic
