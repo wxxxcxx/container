@@ -31,6 +31,7 @@ jobs:
         with:
           push: true
           context: ./${{ env.CONTEXT }}
+          file: ./${{ env.CONTEXT }}/Containerfile
           platforms: |
             linux/amd64
             linux/arm/v7

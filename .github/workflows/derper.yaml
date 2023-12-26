@@ -1,4 +1,4 @@
-name: NaiveProxy
+name: Derper
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     - cron:  '0 0 * * 1'
 
 env:
-  DOCKER_REPOSITORY: naiveproxy
-  CONTEXT: ./naiveproxy
+  DOCKER_REPOSITORY: derper
+  CONTEXT: ./derper
 
 jobs:
   build_and_push:

@@ -2,31 +2,30 @@ FROM golang:latest AS builder
 
 WORKDIR /app
 
+
+
 RUN go install tailscale.com/cmd/derper@main
 
 
-FROM ubuntu:20.04
+FROM debian:latest
 WORKDIR /app
 
 # ========= CONFIG =========
 # - derper args
-ENV DERP_HOST=127.0.0.1
+ENV DERP_HOST=derp.tailscale.com
 ENV DERP_CERTS=/app/certs/
 ENV DERP_STUN true
 ENV DERP_VERIFY_CLIENTS false
 # ==========================
 
 # apt
-RUN apt-get update && \
-    apt-get install -y openssl curl
+RUN apt-get update  && \
+    apt-get install -y openssl curl && \
+    apt autoremove -y
 
-COPY build_cert.sh /app/
-COPY --from=builder /app/derper /app/derper
+COPY --from=builder /go/bin/derper /app/derper
 
-# build self-signed certs && start derper
-CMD bash /app/build_cert.sh $DERP_HOST $DERP_CERTS /app/san.conf && \
-    /app/derper --hostname=$DERP_HOST \
-    --certmode=manual \
-    --certdir=$DERP_CERTS \
-    --stun=$DERP_STUN  \
-    --verify-clients=$DERP_VERIFY_CLIENTS
+
+ENTRYPOINT [ "/app/derper" ]
+
+CMD ["--hostname=${DERP_HOST}", "--certmode=manual", "--certdir=${DERP_CERTS}", "--stun=${DERP_STUN}", "--verify-clients=${DERP_VERIFY_CLIENTS}"]
