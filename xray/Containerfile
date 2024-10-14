@@ -2,7 +2,7 @@ FROM debian:latest
 
 WORKDIR /xray
 
-COPY install.sh healthcheck.sh start.sh /xray/
+COPY install.sh start.sh /xray/
 
 RUN /xray/install.sh
 
