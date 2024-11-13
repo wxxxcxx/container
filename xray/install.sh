@@ -1,7 +1,7 @@
 #! /bin/bash
 set -e
 apt-get update  && \
-apt-get install -y curl gpg lsb-release unzip wget dumb-init netcat && \
+apt-get install -y curl gpg lsb-release unzip wget dumb-init && \
 apt-get clean autoclean && \
 apt-get autoremove --yes &&
 
