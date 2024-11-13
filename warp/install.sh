@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 set -e
 apt-get update  && \
 apt-get install -y curl gpg lsb-release unzip wget dumb-init netcat && \

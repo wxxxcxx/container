@@ -1,6 +1,6 @@
-#! /bin/bash
+#! /bin/sh
 set -e
-until nc -z -v -w5 localhost 40000
+until nc -z -v -w5 localhost 9999
 do
     echo "Waiting for warp..."
     sleep 1
