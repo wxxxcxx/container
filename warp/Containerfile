@@ -1,16 +1,32 @@
-FROM debian:latest
+FROM debian:bookworm
 
-WORKDIR /warp
+RUN apt update && \
+    apt install -y curl gnupg lsb-release sudo jq ipcalc && \
+    curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list && \ 
+    sudo apt update && sudo apt install -y cloudflare-warp && \
+    apt clean && \
+    apt autoremove -y
 
-COPY install.sh healthcheck.sh start.sh /warp/
+RUN arch=$(dpkg --print-architecture) && \
+    curl -fsSL https://github.com/ginuerzh/gost/releases/download/v2.12.0/gost_2.12.0_linux_${arch}.tar.gz | tar -zxvf - && \
+    mv gost /usr/local/bin/ && \
+    chmod +x /usr/local/bin/gost
+        
 
-RUN chmod +x /warp/*
+# Accept Cloudflare WARP TOS
+RUN mkdir -p /home/warp/.local/share/warp && \
+    echo -n 'yes' > /home/warp/.local/share/warp/accepted-tos.txt
 
-RUN ls -l /warp
+ENV PORT=1080
+ENV WARP_SLEEP=2
+ENV REGISTER_WHEN_MDM_EXISTS=
+ENV WARP_LICENSE_KEY=
+ENV BETA_FIX_HOST_CONNECTIVITY=
 
-RUN /warp/install.sh
+COPY entrypoint.sh /entrypoint.sh
+COPY ./healthcheck.sh /healthcheck.sh
 
-HEALTHCHECK --start-period=20s --interval=1m --timeout=10s --retries=3 CMD ./healthcheck.sh || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 CMD /healthcheck.sh
 
-CMD [ "/warp/start.sh" ]
-
+CMD ["sh","-c", "/entrypoint.sh"]
